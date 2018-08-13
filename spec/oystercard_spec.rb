@@ -30,7 +30,7 @@ describe Oystercard do
 #      expect(subject).to respond_to(:deduct).with(1).argument
 #    end
     it ".deduct - method should change the balance by the amount of the argument" do
-      subject.top_up(20)
+      subject.top_up(Oystercard::MAX_LIMIT)
       expect{ subject.deduct(5) }.to change{ subject.balance }.by(-5)
     end
   end
@@ -41,8 +41,12 @@ describe Oystercard do
 #      expect(subject).to respond_to(:touch_in)
 #    end
     it ".touch_in - should change in_journey status to true" do
+      subject.top_up(Oystercard::MAX_LIMIT)
       subject.touch_in
       expect(subject.in_journey?).to be(true)
+    end
+    it ".touch_in - should raise error if balance is less than £#{Oystercard::MIN_BALANCE}" do
+      expect{ subject.touch_in }.to raise_error("Not enough money on card!")
     end
   end
 
@@ -51,6 +55,7 @@ describe Oystercard do
 #      expect(subject).to respond_to(:touch_out)
 #    end
     it ".touch_out - should change in_journey status to false" do
+      subject.top_up(Oystercard::MAX_LIMIT)
       subject.touch_in
       subject.touch_out
       expect(subject).to_not be_in_journey
