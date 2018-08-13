@@ -13,4 +13,17 @@ describe Oystercard do
     end
   end
 
+  describe "#top_up" do
+
+    it ".top_up - subject should respond to method with 1 argument" do
+      expect(subject).to respond_to(:top_up).with(1).argument
+    end
+
+    it ".top_up - method should change the balance by the amount of the argument" do
+      expect{ subject.top_up(5) }.to change{ subject.balance }.by(5)
+    end
+
+
+  end
+
 end
