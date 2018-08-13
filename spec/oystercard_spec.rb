@@ -37,9 +37,9 @@ describe Oystercard do
 
 
   describe "#touch_in" do
-    it ".touch_in - subject should respond to this method" do
-      expect(subject).to respond_to(:touch_in)
-    end
+#    it ".touch_in - subject should respond to this method" do
+#      expect(subject).to respond_to(:touch_in)
+#    end
     it ".touch_in - should change in_journey status to true" do
       subject.touch_in
       expect(subject.in_journey?).to be(true)
@@ -47,9 +47,9 @@ describe Oystercard do
   end
 
   describe "#touch_out" do
-    it ".touch_out - subject should respond to this method" do
-      expect(subject).to respond_to(:touch_out)
-    end
+#    it ".touch_out - subject should respond to this method" do
+#      expect(subject).to respond_to(:touch_out)
+#    end
     it ".touch_out - should change in_journey status to false" do
       subject.touch_in
       subject.touch_out
