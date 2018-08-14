@@ -42,16 +42,20 @@ describe Oystercard do
 #    end
     it ".touch_in - should change in_journey status to true" do
       subject.top_up(Oystercard::MAX_LIMIT)
-      subject.touch_in
+      subject.touch_in("bank")
       expect(subject.in_journey?).to be(true)
     end
     it ".touch_in - should raise error if balance is less than £#{Oystercard::MIN_FARE}" do
-      expect{ subject.touch_in }.to raise_error("Not enough money on card!")
+      expect{ subject.touch_in("bank") }.to raise_error("Not enough money on card!")
     end
     it ".touch_in - should remember the entry station" do
       subject.top_up(Oystercard::MAX_LIMIT)
-      subject.touch_in
+      subject.touch_in("bank")
       expect(subject.entry_station).to eq("station")
+    end
+    it ".touch_in - should take an argument" do
+      subject.top_up(Oystercard::MAX_LIMIT)
+      expect(subject).to respond_to(:touch_in).with(1).argument
     end
   end
 
@@ -61,14 +65,14 @@ describe Oystercard do
 #    end
     it ".touch_out - should change in_journey status to false" do
       subject.top_up(Oystercard::MAX_LIMIT)
-      subject.touch_in
+      subject.touch_in("bank")
       subject.touch_out
       expect(subject).to_not be_in_journey
     end
 
     it ".touch_out - your card should be charged when you touch out" do
       subject.top_up(Oystercard::MAX_LIMIT)
-      subject.touch_in
+      subject.touch_in("bank")
       expect{ subject.touch_out }.to change{ subject.balance }.by(-Oystercard::MIN_FARE)
 
     end

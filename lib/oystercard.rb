@@ -22,7 +22,7 @@ class Oystercard
     @in_journey
   end
 
-  def touch_in
+  def touch_in(station)
     raise "Not enough money on card!" if @balance < MIN_FARE
     @in_journey = true
     @entry_station = "station"
