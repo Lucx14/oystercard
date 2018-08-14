@@ -7,7 +7,7 @@ describe Oystercard do
       expect(subject.balance).to eq(0)
     end
     it "@journeys - initializes with an empty array" do
-      expect(subject.journeys).to eq([])
+      expect(subject.journeys).to be_empty
     end
   end
 
@@ -44,23 +44,28 @@ describe Oystercard do
 
 
   describe "#touch_out" do
+    let(:entry_station) { double :station }
+    let(:exit_station) {double :station }
+    let(:journey){ {entry_station: entry_station, exit_station: exit_station} }
+
     before { subject.top_up(Oystercard::MAX_LIMIT) }
-    before { subject.touch_in("bank") }
+    before { subject.touch_in(entry_station) }
+
     context "Card is topped up and user touches in then touches out" do
-      before { subject.touch_out("Moorgate") }
+      before { subject.touch_out(exit_station) }
       it ".touch_out - should change in_journey status to false" do
         expect(subject.in_journey?).to eq(false)
       end
       it ".touch_out - testing exit_station instance var" do
-        expect(subject.exit_station).to eq("Moorgate")
+        expect(subject.exit_station).to eq(exit_station)
       end
       it ".touch_out - creates a hash of the journey" do
-        expect(subject.journeys).to eq([{ "bank" => "Moorgate" }])
+        expect(subject.journeys).to include journey
       end
     end
     context "Card is topped up and user touches in" do
       it ".touch_out - your card should be charged when you touch out" do
-        expect{ subject.touch_out("Moorgate") }.to change{ subject.balance }.by(-Oystercard::MIN_FARE)
+        expect{ subject.touch_out(exit_station) }.to change{ subject.balance }.by(-Oystercard::MIN_FARE)
       end
     end
   end
