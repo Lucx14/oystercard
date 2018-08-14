@@ -9,6 +9,9 @@ describe Oystercard do
     it "@balance - has a balance of zero" do
       expect(subject.balance).to eq(0)
     end
+    it "@journeys - initializes with an empty array" do
+      expect(subject.journeys.length).to eq(0)
+    end
   end
 
   describe "#top_up" do
@@ -82,6 +85,13 @@ describe Oystercard do
       subject.touch_in("bank")
       subject.touch_out("Moorgate")
       expect(subject.exit_station).to eq("Moorgate")
+    end
+
+    it ".touch_out - creates a hash of the journey" do
+      subject.top_up(Oystercard::MAX_LIMIT)
+      subject.touch_in("bank")
+      subject.touch_out("Moorgate")
+      expect(subject.journeys).to eq([{ "bank" => "Moorgate" }])
     end
 
   end
