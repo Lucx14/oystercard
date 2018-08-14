@@ -9,9 +9,6 @@ describe Oystercard do
     it "@journeys - initializes with an empty array" do
       expect(subject.journeys).to eq([])
     end
-    it "@in_journey - is initially false (not in journey)" do
-      expect(subject.in_journey).to eq(false)
-    end
   end
 
   describe "#top_up" do
@@ -26,19 +23,20 @@ describe Oystercard do
 
 
   describe "#touch_in" do
+    let(:station){ double :station }
     context "Card is topped up first" do
       before {subject.top_up(Oystercard::MAX_LIMIT)}
-      before {subject.touch_in("bank")}
+      before { subject.touch_in(station) }
       it ".touch_in - should change in_journey status to true" do
-        expect(subject.in_journey).to be(true)
+        expect(subject.in_journey?).to be(true)
       end
       it ".touch_in - should remember the entry station" do
-        expect(subject.entry_station).to eq("bank")
+        expect(subject.entry_station).to eq(station)
       end
     end
     context "Card is not topped up first" do
       it ".touch_in - should raise error if balance is less than £#{Oystercard::MIN_FARE}" do
-        expect{ subject.touch_in("bank") }.to raise_error("Not enough money on card!")
+        expect{ subject.touch_in(station) }.to raise_error("Not enough money on card!")
       end
     end
   end
@@ -51,7 +49,7 @@ describe Oystercard do
     context "Card is topped up and user touches in then touches out" do
       before { subject.touch_out("Moorgate") }
       it ".touch_out - should change in_journey status to false" do
-        expect(subject.in_journey).to eq(false)
+        expect(subject.in_journey?).to eq(false)
       end
       it ".touch_out - testing exit_station instance var" do
         expect(subject.exit_station).to eq("Moorgate")
