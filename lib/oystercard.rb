@@ -19,11 +19,6 @@ class Oystercard
     @balance += amount
   end
 
-
-  def in_journey?
-    @in_journey
-  end
-
   def touch_in(station)
     raise "Not enough money on card!" if @balance < MIN_FARE
     @in_journey = true
@@ -35,17 +30,8 @@ class Oystercard
     @in_journey = false
     @exit_station = station
     @journeys << {@entry_station => @exit_station}
-
-
     @entry_station = nil
-
   end
-
-  # def entry_station
-  #     @entry_station
-  # end
-
-
 
   private
 
