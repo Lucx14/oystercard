@@ -51,7 +51,7 @@ describe Oystercard do
     it ".touch_in - should remember the entry station" do
       subject.top_up(Oystercard::MAX_LIMIT)
       subject.touch_in("bank")
-      expect(subject.entry_station).to eq("station")
+      expect(subject.entry_station).to eq("bank")
     end
     it ".touch_in - should take an argument" do
       subject.top_up(Oystercard::MAX_LIMIT)
@@ -66,16 +66,24 @@ describe Oystercard do
     it ".touch_out - should change in_journey status to false" do
       subject.top_up(Oystercard::MAX_LIMIT)
       subject.touch_in("bank")
-      subject.touch_out
+      subject.touch_out("Moorgate")
       expect(subject).to_not be_in_journey
     end
 
     it ".touch_out - your card should be charged when you touch out" do
       subject.top_up(Oystercard::MAX_LIMIT)
       subject.touch_in("bank")
-      expect{ subject.touch_out }.to change{ subject.balance }.by(-Oystercard::MIN_FARE)
+      expect{ subject.touch_out("Moorgate") }.to change{ subject.balance }.by(-Oystercard::MIN_FARE)
 
     end
+
+    it ".touch_out - testing exit_station instance var" do
+      subject.top_up(Oystercard::MAX_LIMIT)
+      subject.touch_in("bank")
+      subject.touch_out("Moorgate")
+      expect(subject.exit_station).to eq("Moorgate")
+    end
+
   end
 
 
